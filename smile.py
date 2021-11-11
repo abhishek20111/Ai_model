@@ -1,4 +1,5 @@
 import cv2
+from random import randrange
 import win32com.client
 
 def speech(str):
@@ -9,8 +10,11 @@ def speech(str):
 training_face_data = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 smile_detector = cv2.CascadeClassifier('haarcascade_smile.xml')
 
-webcam = cv2.VideoCapture(0)
 
+#speech("hi buddy how are you")
+webcam = cv2.VideoCapture(0)
+#speech("this software will detect smile on your face .")
+#speech("If it show green box in your smile then your smile is awesome")
 while True:
     successful_frame_read, frame = webcam.read()
 
@@ -35,11 +39,15 @@ while True:
         # convert the_face in gray image
         face_Graycale_img = cv2.cvtColor(the_faces, cv2.COLOR_BGR2GRAY)
 
-        smile_cordinates = smile_detector.detectMultiScale(face_Graycale_img, scaleFactor=1.7, minNeighbors=14)
+        smile_cordinates = smile_detector.detectMultiScale(face_Graycale_img, scaleFactor=1.7, minNeighbors=13)
 
         #it check smile in faces
-        for (x1, y1, w1, h1) in smile_cordinates:
-            cv2.rectangle(the_faces, (x1, y1), (x1 + w1, y1 + h1), (0, 255, 0), 3)
+        #for (x1, y1, w1, h1) in smile_cordinates:
+            #cv2.rectangle(the_faces, (x1, y1), (x1 + w1, y1 + h1), (0, 255, 0), 3)
+
+        # Lable this face as smiling
+        if len(smile_cordinates) >0:
+            cv2.putText(frame, 'smiling', (x, y+h+40), fontScale =3, fontFace = cv2.FONT_HERSHEY_PLAIN, color = (255, 255, 255))
 
 
     cv2.imshow('Smile detector', frame)
